@@ -1,14 +1,17 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-func CalculateTwoTest(t *testing.T) {
-	if CalculateTwo(2) != 4 {
-		t.Error("expected 2 + 2 to equal 4")
-	}
+func TestCalculateTwo(t *testing.T) {
+	output := CalculateTwo(2)
+	assert.Equal(t, output, 4, fmt.Sprintf("test failed: expected: %d, actual: %d", output, 4))
 }
 
-func CalculateTwoMultipleTest(t *testing.T) {
+func TestCalculateTwoTable(t *testing.T) {
 	var tests = []struct {
 		input    int
 		expected int
@@ -20,8 +23,7 @@ func CalculateTwoMultipleTest(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if output := CalculateTwo(test.input); output != test.expected {
-			t.Error("test failed: {} input, {} expected, recieved: {}", test.input, test.expected, output)
-		}
+		output := CalculateTwo(test.input)
+		assert.Equal(t, output, test.expected, fmt.Sprintf("test failed: input: %d, expected: %d, recieved: %d", test.input, test.expected, output))
 	}
 }
