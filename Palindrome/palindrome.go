@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import ()
 
 func IsPalindrome(s string) bool {
 	return false
