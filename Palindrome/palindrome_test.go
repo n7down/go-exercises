@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -20,6 +21,6 @@ func TestIsPalindrome(t *testing.T) {
 
 	for _, test := range tests {
 		actual := IsPalindrome(test.input)
-		assert.Equal(t, actual, test.expected)
+		assert.Equal(t, actual, test.expected, fmt.Sprintf("%s should return %t", test.input, test.expected))
 	}
 }
