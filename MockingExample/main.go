@@ -8,6 +8,11 @@ import (
 	"github.com/n7down/go-exersices/MockingExample/models"
 )
 
+// TODO:
+// https://semaphoreci.com/community/tutorials/building-go-web-applications-and-microservices-using-gin
+// https://semaphoreci.com/community/tutorials/test-driven-development-of-go-web-applications-with-gin
+// https://www.alexedwards.net/blog/organising-database-access#using-an-interface
+
 type Env struct {
 	db models.Datastore
 }
