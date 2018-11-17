@@ -1,6 +1,4 @@
-package palindrome
-
-import ()
+package main
 
 func Reverse(s string) string {
 	runes := []rune(s)
