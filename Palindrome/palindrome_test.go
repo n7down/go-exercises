@@ -1,4 +1,4 @@
-package main
+package palindrome
 
 import (
 	"fmt"

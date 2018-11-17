@@ -1,4 +1,4 @@
-package main
+package palindrome
 
 import ()
 
@@ -23,4 +23,8 @@ func IsPalindrome(s string) bool {
 		return true
 	}
 	return false
+}
+
+func main() {
+
 }
