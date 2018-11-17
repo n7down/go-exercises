@@ -40,6 +40,6 @@ func (env *Env) booksIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, bk := range bks {
-		fmt.Fprintf(w, "%s, %s, %s\n", bk.Title, bk.Author, bk.Price)
+		fmt.Fprintf(w, "%d %s, %s, %s\n", bk.Id, bk.Title, bk.Author, bk.Price)
 	}
 }

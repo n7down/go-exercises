@@ -1,6 +1,7 @@
 package models
 
 type Book struct {
+	Id     int
 	Title  string
 	Author string
 	Price  string
@@ -16,7 +17,7 @@ func (db *DB) AllBooks() ([]*Book, error) {
 	bks := make([]*Book, 0)
 	for rows.Next() {
 		bk := new(Book)
-		err := rows.Scan(&bk.Title, &bk.Author, &bk.Price)
+		err := rows.Scan(&bk.Id, &bk.Title, &bk.Author, &bk.Price)
 		if err != nil {
 			return nil, err
 		}

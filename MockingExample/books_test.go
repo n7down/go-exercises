@@ -14,8 +14,8 @@ type mockDB struct{}
 
 func (mdb *mockDB) AllBooks() ([]*models.Book, error) {
 	bks := make([]*models.Book, 0)
-	bks = append(bks, &models.Book{"Emma", "Jayne Austen", "9.44"})
-	bks = append(bks, &models.Book{"The Time Machine", "H. G. Wells", "5.99"})
+	bks = append(bks, &models.Book{1, "Emma", "Jayne Austen", "9.44"})
+	bks = append(bks, &models.Book{2, "The Time Machine", "H. G. Wells", "5.99"})
 	return bks, nil
 }
 
@@ -26,8 +26,9 @@ func TestBooksIndex(t *testing.T) {
 	env := Env{db: &mockDB{}}
 	http.HandlerFunc(env.booksIndex).ServeHTTP(rec, req)
 
-	expected := "Emma, Jayne Austen, 9.44\nThe Time Machine, H. G. Wells, 5.99\n"
-	if expected != rec.Body.String() {
+	expected := "1 Emma, Jayne Austen, 9.44\n2 The Time Machine, H. G. Wells, 5.99\n"
+	actual := rec.Body.String()
+	if expected != actual {
 		t.Errorf("\n...expected = %v\n...obtained = %v", expected, rec.Body.String())
 	}
 }
@@ -41,8 +42,8 @@ func TestBookDatabase(t *testing.T) {
 	env := &Env{db}
 
 	bks, err := env.db.AllBooks()
-	fmt.Println("error: " + err.Error())
-	for _, bk := range bks {
-		fmt.Sprintf("%s, %s, %s\n", bk.Title, bk.Author, bk.Price)
+	if err != nil {
+		log.Panic(err)
 	}
+	fmt.Println(bks)
 }
