@@ -40,18 +40,19 @@ func (c *CreditCard) SetCardNumber(cardNumber int) {
 	c.cardNumber = cardNumber
 }
 
-func (c CreditCard) CardNumber() {
-	return c.CardNumber
+func (c CreditCard) CardNumber() int {
+	return c.cardNumberd
 }
 
-func (c *CreditCard) SetExpirationDate(month, year int) error {
-	c.expirationMonth, c.expirationYear = month, year
+func (c *CreditCard) SetExpirationDate(month, year int) {
+	c.expirationMonth = month
+	c.expirationYear = year
 }
 
 func (c CreditCard) ExpirationDate() (int, int) {
-	return month, year
+	return c.expirationMonth, c.expirationYear
 }
 
-func (c *CarditCard) AddBalance(float64 d) {
+func (c *CreditCard) AddBalance(d float64) {
 	c.balance = c.balance + d
 }
