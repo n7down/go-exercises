@@ -34,6 +34,7 @@ var computers = []Computers{
 }
 
 func computerHandler(w http.ResponseWriter, r *http.Request) {
+}
 
 func main() {
 	http.HandleFunc("/computers", computerHandler)
