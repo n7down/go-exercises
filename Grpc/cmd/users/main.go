@@ -15,10 +15,12 @@ var (
 
 func main() {
 	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	listenerPort := fmt.Sprintf(":%d", *port)
+	lis, err := net.Listen("tcp", listenerPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
 	grpcServer.Serve(lis)
+	fmt.Sprintf("Listening on port %s", listenerPort)
 }
