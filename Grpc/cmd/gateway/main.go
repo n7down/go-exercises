@@ -1,18 +1,19 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	pbMessages "github.com/n7down/go-exercises/Grpc/internal/pb/messages"
-	"github.com/n7down/go-exercises/Grpc/internal/test/messages"
 	"google.golang.org/grpc"
+
+	"github.com/n7down/go-exercises/Grpc/internal/messages"
+	messagesPB "github.com/n7down/go-exercises/Grpc/internal/messages/pb"
+
+	"github.com/n7down/go-exercises/Grpc/internal/users"
 )
 
 type login struct {
@@ -22,7 +23,7 @@ type login struct {
 
 var (
 	identityKey  = "id"
-	port         = flag.Int("port", 8080, "The server port")
+	gatewayPort  = "8080"
 	messagesPort = "8081"
 )
 
@@ -44,11 +45,6 @@ type User struct {
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
@@ -146,24 +142,24 @@ func main() {
 	}
 	defer conn.Close()
 
-	helloClient := pbMessages.NewHelloServiceClient(conn)
+	helloClient := messagesPB.NewHelloServiceClient(conn)
 
-	test := v1.Group("/test")
+	messagesGroup := v1.Group("/messages")
 	//internal.Use(authMiddleware.MiddlewareFunc())
 	{
 		m := messages.NewMessages(helloClient)
-		test.GET("/messages/hello", m.HelloHandler)
+		messagesGroup.GET("/hello", m.HelloHandler)
 	}
 
 	usersGroup := v1.Group("/users")
 	usersGroup.Use(authMiddleware.MiddlewareFunc())
 	{
-		u := NewUsers()
-		usersGroup.POST("/create", u.createHandler)
-		usersGroup.GET("/list", u.listHandler)
-		usersGroup.GET("/byid/:id", u.byIdHandler)
-		usersGroup.PUT("/update/:id", u.updateHandler)
-		usersGroup.DELETE("/delete/:id", u.deleteHandler)
+		u := users.NewUsers()
+		usersGroup.POST("/create", u.CreateHandler)
+		usersGroup.GET("/list", u.ListHandler)
+		usersGroup.GET("/byid/:id", u.ByIdHandler)
+		usersGroup.PUT("/update/:id", u.UpdateHandler)
+		usersGroup.DELETE("/delete/:id", u.DeleteHandler)
 	}
 
 	products := v1.Group("/products")
@@ -181,31 +177,9 @@ func main() {
 	{
 	}
 
-	routerPort := fmt.Sprintf(":%s", port)
-	fmt.Printf("Listening on port: %s\n", port)
+	routerPort := fmt.Sprintf(":%s", gatewayPort)
+	fmt.Printf("Listening on port: %s\n", gatewayPort)
 	if err := http.ListenAndServe(routerPort, router); err != nil {
 		log.Fatal(err)
 	}
-}
-
-type Users struct{}
-
-func NewUsers() *Users {
-	return &Users{}
-}
-
-// TODO: validation step for each handler
-func (u Users) createHandler(c *gin.Context) {
-}
-
-func (u Users) byIdHandler(c *gin.Context) {
-}
-
-func (u Users) listHandler(c *gin.Context) {
-}
-
-func (u Users) updateHandler(c *gin.Context) {
-}
-
-func (u Users) deleteHandler(c *gin.Context) {
 }

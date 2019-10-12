@@ -1,11 +1,11 @@
 package messages
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
 
-	"github.com/n7down/go-exercises/Grpc/internal/pb/messages"
+	"github.com/gin-gonic/gin"
+	"github.com/n7down/go-exercises/Grpc/internal/messages/pb"
 )
 
 const (
@@ -20,11 +20,11 @@ func NewMessages(c messages.HelloServiceClient) *Messages {
 	return &Messages{Client: c}
 }
 
-type HelloRequest struct {
+type HelloMessageRequest struct {
 	Name string `json: "name" binding:"required"`
 }
 
-func (r *HelloRequest) Validate() url.Values {
+func (r *HelloMessageRequest) Validate() url.Values {
 	errs := url.Values{}
 	if r.Name == "" {
 		errs.Add("name", "The name field is required!")
@@ -32,14 +32,14 @@ func (r *HelloRequest) Validate() url.Values {
 	return errs
 }
 
-type HelloResponse struct {
+type HelloMessageResponse struct {
 	Message string `json: "message"`
 }
 
 func (m Messages) HelloHandler(c *gin.Context) {
 	var (
-		req HelloRequest
-		res HelloResponse
+		req HelloMessageRequest
+		res HelloMessageResponse
 	)
 
 	if err := c.BindJSON(&req); err != nil {
@@ -60,7 +60,7 @@ func (m Messages) HelloHandler(c *gin.Context) {
 		return
 	}
 
-	res = HelloResponse{
+	res = HelloMessageResponse{
 		Message: r.Message,
 	}
 
