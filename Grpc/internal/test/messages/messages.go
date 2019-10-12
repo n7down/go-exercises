@@ -1,23 +1,23 @@
 package messages
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
 
-	"github.com/n7down/go-exersices/Grpc/internal/pb/messages"
-	"google.golang.org/grpc"
+	"github.com/n7down/go-exercises/Grpc/internal/pb/messages"
 )
 
 const (
 	messagesPort = "8081"
 )
 
-type Messages struct{}
+type Messages struct {
+	Client messages.HelloServiceClient
+}
 
-func NewMessages() *Messages {
-	return &Messages{}
+func NewMessages(c messages.HelloServiceClient) *Messages {
+	return &Messages{Client: c}
 }
 
 type HelloRequest struct {
@@ -54,16 +54,7 @@ func (m Messages) HelloHandler(c *gin.Context) {
 		return
 	}
 
-	conn, err := grpc.Dial(fmt.Sprintf("localhost:%d", messagesPort))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
-		return
-	}
-	defer conn.Close()
-
-	client := messages.NewHelloServiceClient(conn)
-
-	r, err := client.SayHello(c, &messages.HelloRequest{Name: req.Name})
+	r, err := m.Client.SayHello(c, &messages.HelloRequest{Name: req.Name})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return

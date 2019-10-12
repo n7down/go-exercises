@@ -6,13 +6,13 @@ import (
 	"log"
 	"net"
 
-	"github.com/n7down/go-exersices/Grpc/internal/pb/messages"
+	"github.com/n7down/go-exercises/Grpc/internal/pb/messages"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
 var (
-	port = flag.Int("port", 8081, "The server port")
+	port = "8081"
 )
 
 type testServer struct{}
@@ -23,10 +23,11 @@ func (t *testServer) SayHello(ctx context.Context, req *messages.HelloRequest) (
 
 func main() {
 	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+	fmt.Printf("Listening on port: %s\n", port)
 	grpcServer := grpc.NewServer()
 	messages.RegisterHelloServiceServer(grpcServer, &testServer{})
 	grpcServer.Serve(lis)

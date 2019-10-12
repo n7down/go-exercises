@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	"github.com/n7down/go-exersices/Grpc/internal/test/messages"
+	pbMessages "github.com/n7down/go-exercises/Grpc/internal/pb/messages"
+	"github.com/n7down/go-exercises/Grpc/internal/test/messages"
+	"google.golang.org/grpc"
 )
 
 type login struct {
@@ -18,8 +21,9 @@ type login struct {
 }
 
 var (
-	identityKey = "id"
-	port        = flag.Int("port", 8080, "The server port")
+	identityKey  = "id"
+	port         = flag.Int("port", 8080, "The server port")
+	messagesPort = "8081"
 )
 
 func helloHandler(c *gin.Context) {
@@ -40,7 +44,11 @@ type User struct {
 }
 
 func main() {
-	flag.Parse()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
@@ -131,11 +139,20 @@ func main() {
 	auth.GET("/refresh_token", authMiddleware.RefreshHandler)
 	auth.POST("/login", authMiddleware.LoginHandler)
 
-	internal := v1.Group("/test")
-	internal.Use(authMiddleware.MiddlewareFunc())
+	conn, err := grpc.Dial("127.0.0.1:8081", grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	defer conn.Close()
+
+	helloClient := pbMessages.NewHelloServiceClient(conn)
+
+	test := v1.Group("/test")
+	//internal.Use(authMiddleware.MiddlewareFunc())
 	{
-		m := messages.NewMessages()
-		internal.GET("/messages/hello", m.HelloHandler)
+		m := messages.NewMessages(helloClient)
+		test.GET("/messages/hello", m.HelloHandler)
 	}
 
 	usersGroup := v1.Group("/users")
@@ -165,6 +182,7 @@ func main() {
 	}
 
 	routerPort := fmt.Sprintf(":%s", port)
+	fmt.Printf("Listening on port: %s\n", port)
 	if err := http.ListenAndServe(routerPort, router); err != nil {
 		log.Fatal(err)
 	}
