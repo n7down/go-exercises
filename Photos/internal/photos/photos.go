@@ -17,7 +17,7 @@ type FileData struct {
 	Index  int
 }
 
-func Solution(s string) string {
+func RenamePhotos(s string) string {
 	// write your code in Go 1.4
 	var f []FileData
 	photos := strings.Split(s, "\n")
