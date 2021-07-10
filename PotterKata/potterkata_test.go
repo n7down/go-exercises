@@ -28,14 +28,14 @@ func TestNoDiscount(t *testing.T) {
 func TestTwoDiscount(t *testing.T) {
 	var twoBookDiscount = 0.05
 	var tests = []struct {
-		firstBook int
+		firstBook  int
 		secondBook int
-		thirdBook int
+		thirdBook  int
 		fourthBook int
-		fifthBook int
-		expected float64
+		fifthBook  int
+		expected   float64
 	}{
-		{1, 1, 0, 0, 0, (8*2*twoBookDiscount)-(8*2))
+		{1, 1, 0, 0, 0, (8 * 2 * twoBookDiscount) - (8 * 2)},
 	}
 
 	for _, test := range tests {
