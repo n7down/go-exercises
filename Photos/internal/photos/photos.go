@@ -15,12 +15,14 @@ type FileData struct {
 	Extension string
 	Name      string
 	Timestamp time.Time
+	Index     int
 }
 
 type FileDataIndexed struct {
 	Name      string
-	Index     int
+	NameIndex int
 	Extension string
+	Index     int
 }
 
 func RenamePhotos(s string) string {
@@ -32,7 +34,7 @@ func RenamePhotos(s string) string {
 	)
 
 	photos := strings.Split(s, "\n")
-	for _, photo := range photos {
+	for i, photo := range photos {
 		data := strings.Split(photo, ",")
 		extension := strings.Split(strings.TrimSpace(data[0]), ".")
 		str := strings.TrimSpace(data[2])
@@ -41,6 +43,7 @@ func RenamePhotos(s string) string {
 			Extension: extension[1],
 			Name:      strings.TrimSpace(data[1]),
 			Timestamp: timestamp,
+			Index:     i,
 		}
 		fileDataList = append(fileDataList, fileData)
 	}
@@ -64,15 +67,21 @@ func RenamePhotos(s string) string {
 
 		fileDataIndexed := FileDataIndexed{
 			Name:      f.Name,
-			Index:     i,
+			NameIndex: i,
 			Extension: f.Extension,
+			Index:     f.Index,
 		}
 
 		fileDataIndexedList = append(fileDataIndexedList, fileDataIndexed)
 	}
 
+	// sort by index
+	sort.Slice(fileDataIndexedList, func(i, j int) bool {
+		return fileDataIndexedList[i].Index < (fileDataIndexedList[j].Index)
+	})
+
 	for _, f := range fileDataIndexedList {
-		b.WriteString(fmt.Sprintf("%s%d.%s\n", f.Name, f.Index, f.Extension))
+		b.WriteString(fmt.Sprintf("%s%d.%s\n", f.Name, f.NameIndex, f.Extension))
 	}
 
 	return b.String()
