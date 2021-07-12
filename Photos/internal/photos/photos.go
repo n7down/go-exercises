@@ -25,27 +25,69 @@ type FileDataIndexed struct {
 	Index     int
 }
 
+type FileNameCounter struct {
+	fileNameCounterMap map[string]int
+}
+
+func NewFileNameCounter() *FileNameCounter {
+	f := &FileNameCounter{
+		fileNameCounterMap: make(map[string]int),
+	}
+	return f
+}
+
+func (f *FileNameCounter) AddFileName(fileName string) {
+	if val, ok := f.fileNameCounterMap[fileName]; ok {
+		val = val + 1
+		f.fileNameCounterMap[fileName] = val
+	} else {
+		f.fileNameCounterMap[fileName] = 1
+	}
+}
+
+func (f *FileNameCounter) GetFormatedIndex(fileName string, index int) string {
+	if index >= 10 {
+		return fmt.Sprintf("%d", index)
+	}
+
+	if val, ok := f.fileNameCounterMap[fileName]; ok {
+		if val >= 10 {
+			return fmt.Sprintf("0%d", index)
+		} else {
+			return fmt.Sprintf("%d", index)
+		}
+	} else {
+		return fmt.Sprintf("%d", index)
+	}
+}
+
 func RenamePhotos(s string) string {
 	var (
 		fileDataList        []FileData
 		fileDataMap         = make(map[string]int)
 		fileDataIndexedList []FileDataIndexed
 		b                   strings.Builder
+		fileNameCounter     *FileNameCounter
 	)
+
+	fileNameCounter = NewFileNameCounter()
 
 	photos := strings.Split(s, "\n")
 	for i, photo := range photos {
 		data := strings.Split(photo, ",")
 		extension := strings.Split(strings.TrimSpace(data[0]), ".")
+		name := strings.TrimSpace(data[1])
 		str := strings.TrimSpace(data[2])
 		timestamp, _ := time.Parse(layout, str)
 		fileData := FileData{
 			Extension: extension[1],
-			Name:      strings.TrimSpace(data[1]),
+			Name:      name,
 			Timestamp: timestamp,
 			Index:     i,
 		}
 		fileDataList = append(fileDataList, fileData)
+
+		fileNameCounter.AddFileName(name)
 	}
 
 	// sort data by date
@@ -81,7 +123,8 @@ func RenamePhotos(s string) string {
 	})
 
 	for _, f := range fileDataIndexedList {
-		b.WriteString(fmt.Sprintf("%s%d.%s\n", f.Name, f.NameIndex, f.Extension))
+		nameIndex := fileNameCounter.GetFormatedIndex(f.Name, f.NameIndex)
+		b.WriteString(fmt.Sprintf("%s%s.%s\n", f.Name, nameIndex, f.Extension))
 	}
 
 	return b.String()
