@@ -75,7 +75,7 @@ func TestMultipleDiscount(t *testing.T) {
 		fifthBook  int
 		expected   float64
 	}{
-		{2, 2, 2, 1, 1, (8 * 8) - (8 * 3 * threeBookDiscount) - (8 * 3 * threeBookDiscount)},
+		{2, 2, 2, 1, 1, (8 * 8) - (8 * 3 * threeBookDiscount) - (8 * 3 * threeBookDiscount) - (8 * 2 * twoBookDiscount)},
 	}
 
 	for _, test := range tests {
