@@ -26,7 +26,7 @@ func TestNoDiscount(t *testing.T) {
 
 	for _, test := range tests {
 		actual := CalculatePotterBookPrice(test.firstBook, test.secondBook, test.thirdBook, test.fourthBook, test.fifthBook)
-		assert.Equal(t, actual, test.expected, fmt.Sprintf("%f should return %f", actual, test.expected))
+		assert.Equal(t, test.expected, actual, fmt.Sprintf("%f should return %f", actual, test.expected))
 	}
 }
 
@@ -44,7 +44,7 @@ func TestTwoDiscount(t *testing.T) {
 
 	for _, test := range tests {
 		actual := CalculatePotterBookPrice(test.firstBook, test.secondBook, test.thirdBook, test.fourthBook, test.fifthBook)
-		assert.Equal(t, actual, test.expected, fmt.Sprintf("%f should return %f", actual, test.expected))
+		assert.Equal(t, test.expected, actual, fmt.Sprintf("%f should return %f", actual, test.expected))
 	}
 }
 
@@ -62,7 +62,7 @@ func TestThreeDiscount(t *testing.T) {
 
 	for _, test := range tests {
 		actual := CalculatePotterBookPrice(test.firstBook, test.secondBook, test.thirdBook, test.fourthBook, test.fifthBook)
-		assert.Equal(t, actual, test.expected, fmt.Sprintf("%f should return %f", actual, test.expected))
+		assert.Equal(t, test.expected, actual, fmt.Sprintf("%f should return %f", actual, test.expected))
 	}
 }
 
@@ -80,6 +80,6 @@ func TestMultipleDiscount(t *testing.T) {
 
 	for _, test := range tests {
 		actual := CalculatePotterBookPrice(test.firstBook, test.secondBook, test.thirdBook, test.fourthBook, test.fifthBook)
-		assert.Equal(t, actual, test.expected, fmt.Sprintf("%f should return %f", actual, test.expected))
+		assert.Equal(t, test.expected, actual, fmt.Sprintf("%f should return %f", actual, test.expected))
 	}
 }
