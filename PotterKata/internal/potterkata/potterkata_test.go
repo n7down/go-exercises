@@ -10,6 +10,8 @@ import (
 const (
 	twoBookDiscount   = 0.05
 	threeBookDiscount = 0.1
+	fourBookDiscount  = 0.2
+	fiveBookDiscount  = 0.25
 )
 
 func TestNoDiscount(t *testing.T) {
@@ -75,7 +77,7 @@ func TestMultipleDiscount(t *testing.T) {
 		fifthBook  int
 		expected   float64
 	}{
-		{2, 2, 2, 1, 1, (8 * 8) - (8 * 3 * threeBookDiscount) - (8 * 3 * threeBookDiscount) - (8 * 2 * twoBookDiscount)},
+		{2, 2, 2, 1, 1, (8 * 8) - (8 * 5 * fiveBookDiscount) - (8 * 3 * threeBookDiscount)},
 	}
 
 	for _, test := range tests {

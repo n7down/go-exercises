@@ -20,12 +20,9 @@ func calculateDiscount(firstBookNum, secondBookNum, thirdBookNum, fourthBookNum,
 	)
 
 	var (
-		bookCount     int     = 0
 		totalDiscount float64 = 0.0
 	)
 
-	// FIXME: get the max number from each of the num
-	// FIXME: iterate over that number of times to get the discount value
 	maxNum := firstBookNum
 	maxNum = max(maxNum, secondBookNum)
 	maxNum = max(maxNum, thirdBookNum)
@@ -33,6 +30,7 @@ func calculateDiscount(firstBookNum, secondBookNum, thirdBookNum, fourthBookNum,
 	maxNum = max(maxNum, fifthBookNum)
 
 	for i := 0; i < maxNum; i++ {
+		var bookCount int = 0
 		if firstBookNum > 0 {
 			firstBookNum -= 1
 			bookCount += 1
@@ -106,7 +104,7 @@ func CalculatePotterBookPrice(firstBookNum, secondBookNum, thirdBookNum, fourthB
 
 	discount := calculateDiscount(firstBookNum, secondBookNum, thirdBookNum, fourthBookNum, fifthBookNum)
 
-	total := firstBookPrice + secondBookPrice + thirdBookPrice + fourthBookPrice + fifthBookPrice - discount
+	total := (firstBookPrice + secondBookPrice + thirdBookPrice + fourthBookPrice + fifthBookPrice) - discount
 
 	return total
 }
