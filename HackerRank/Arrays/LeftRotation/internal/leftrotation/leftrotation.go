@@ -9,7 +9,13 @@ package leftrotation
  *  2. INTEGER d
  */
 
-func RotLeft(a []int32, d int32) []int32 {
-	// Write your code here
+func RotateLeft(a []int32, d int32) []int32 {
+	if len(a) == 0 {
+		return a
+	}
+
+	// first := a[1]
+	// rest := a[2:]
+
 	return []int32{}
 }
