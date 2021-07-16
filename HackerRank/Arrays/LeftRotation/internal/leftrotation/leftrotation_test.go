@@ -25,6 +25,24 @@ func TestLeftRotationWithZeroElements(t *testing.T) {
 	}
 }
 
+func TestLeftRotationWithOneElement(t *testing.T) {
+	var tests = []struct {
+		input           []int32
+		numberRotations int32
+		expected        []int32
+	}{
+		{
+			[]int32{1},
+			1,
+			[]int32{1},
+		},
+	}
+	for _, test := range tests {
+		actual := RotateLeft(test.input, test.numberRotations)
+		assert.Equal(t, test.expected, actual, fmt.Sprintf("%v should return %v", actual, test.expected))
+	}
+}
+
 func TestLeftRotationWithTwoElements(t *testing.T) {
 	var tests = []struct {
 		input           []int32
