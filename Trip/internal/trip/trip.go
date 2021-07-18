@@ -32,21 +32,21 @@ func (t *Trip) AddEdge(a, b string) {
 }
 
 func (t *Trip) GetConnections(a, b string) int {
-	found, numberConnections := t.findConnections(a, b)
+	found, numberConnections := t.findCity(a, b)
 	if found {
 		return numberConnections
 	}
 	return 0
 }
 
-func (t *Trip) findConnections(a, b string) (bool, int) {
+func (t *Trip) findCity(a, b string) (bool, int) {
 	if nodes, ok := t.connectionMap[a]; ok {
 		for _, node := range nodes {
 			if node.City == b {
 				return true, 1
 			} else if !node.Visited {
 				node.Visited = true
-				found, numberConnections := t.findConnections(node.City, b)
+				found, numberConnections := t.findCity(node.City, b)
 				if found {
 					return true, numberConnections + 1
 				}
