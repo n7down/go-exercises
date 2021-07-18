@@ -18,13 +18,12 @@ func RotateLeft(a []int32, d int32) []int32 {
 		return a
 	}
 
-	// var r int32
-	// for i := 0; i < int(d); i++ {
-	first := a[0]
-	rest := a[1:]
+	r := a
+	for i := 0; i < int(d); i++ {
+		first := r[0]
+		r = r[1:]
+		r = append(r, first)
+	}
 
-	rest = append(rest, first)
-	// }
-
-	return rest
+	return r
 }

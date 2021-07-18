@@ -1,35 +1,30 @@
 package trip
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTrip(t *testing.T) {
-	// var tests = []struct {
-	// 	input    int
-	// 	expected int
-	// }{
-	// 	{1, 2},
-	// }
+func TestGetConnectionsWithFourConnections(t *testing.T) {
+	var (
+		expectedConnections = 4
+	)
 
-	// for _, test := range tests {
-	// 	actual := CalculatePotterBookPrice(test.firstBook, test.secondBook, test.thirdBook, test.fourthBook, test.fifthBook)
-	// 	assert.Equal(t, test.expected, actual, fmt.Sprintf("%f should return %f", actual, test.expected))
-	// }
+	trip := NewTrip()
+	trip.AddEdge("san franscico", "san diego")
+	trip.AddEdge("san diego", "las vegas")
+	trip.AddEdge("san diego", "los angeles")
+	trip.AddEdge("las vegas", "salt lake city")
+	trip.AddEdge("las vegas", "phoenix")
+	trip.AddEdge("phoenix", "san antonio")
+	trip.AddEdge("salt lake city", "denver")
+	trip.AddEdge("denver", "indianapolis")
+	trip.AddEdge("las vegas", "boise")
+	trip.AddEdge("boise", "alberta")
 
-	// t := NewTrip()
-	// t.AddEdge("san franscico", "san diego")
-	// t.AddEdge("san diego", "las vegas")
-	// t.AddEdge("san diego", "los angeles")
-	// t.AddEdge("las vegas", "salt lake city")
-	// t.AddEdge("las vegas", "phoenix")
-	// t.AddEdge("phoenix", "san antonio")
-	// t.AddEdge("salt lake city", "denver")
-	// t.AddEdge("denver", "indianapolis")
-	// t.AddEdge("las vegas", "boise")
-	// t.AddEdge("boise", "alberta")
+	actualConnections := trip.GetConnections("san franscico", "denver")
 
-	assert.Fail(t, "not implemented")
+	assert.Equal(t, expectedConnections, actualConnections, fmt.Sprintf("%d should return %d", actualConnections, expectedConnections))
 }
