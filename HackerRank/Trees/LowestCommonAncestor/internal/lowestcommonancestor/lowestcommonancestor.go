@@ -12,18 +12,34 @@ func (n *Node) getLowestCommonAncestor(v1, v2 int) (bool, int) {
 	}
 
 	left := n.Left
-	leftFound, _ := left.getLowestCommonAncestor(v1, v2)
+	leftFound, leftData := left.getLowestCommonAncestor(v1, v2)
 
-	// if leftData != 0 {
-	// 	return true, leftData
-	// }
+	if leftData != 0 {
+		return true, leftData
+	}
 
 	right := n.Right
-	rightFound, _ := right.getLowestCommonAncestor(v1, v2)
+	rightFound, rightData := right.getLowestCommonAncestor(v1, v2)
 
-	// if rightData != 0 {
-	// 	return true, rightData
-	// }
+	if rightData != 0 {
+		return true, rightData
+	}
+
+	if leftFound && n.Data == v1 {
+		return true, n.Data
+	}
+
+	if leftFound && n.Data == v2 {
+		return true, n.Data
+	}
+
+	if rightFound && n.Data == v1 {
+		return true, n.Data
+	}
+
+	if rightFound && n.Data == v2 {
+		return true, n.Data
+	}
 
 	if n.Data == v1 {
 		return true, 0
